@@ -1,0 +1,27 @@
+{
+  "name": "momath-windtunnel",
+  "version": "0.1.0",
+  "description": "MoMath Math Square Wind Tunnel",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "build:watch": "rollup -c rollup.config.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katbug/momath-windtunnel.git"
+  },
+  "keywords": [
+    "MoMath"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/katbug/momath-windtunnel/issues"
+  },
+  "homepage": "https://github.com/katbug/momath-windtunnel#readme",
+  "devDependencies": {
+    "rollup": "^0.62.0"
+  }
+}

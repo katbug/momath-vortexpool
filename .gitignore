@@ -59,3 +59,10 @@ typings/
 
 # next.js build output
 .next
+
+# Vim
+*.swp
+*.swo
+
+# build output
+wind-tunnel.js
