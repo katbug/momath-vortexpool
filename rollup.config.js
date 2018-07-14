@@ -1,5 +1,5 @@
 export default {
-    input: 'index.js',
+    input: './src/index.js',
     output: {
         file: 'wind-tunnel.js',
         format: 'es'
