@@ -7,7 +7,7 @@ export default {
         file: 'wind-tunnel.js',
         format: 'es'
     },
-    external: ['p5beh'],
+    external: ['p5beh', 'p5'],
     plugins: [
         resolve(),
         commonjs()

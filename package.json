@@ -27,6 +27,7 @@
     "rollup-plugin-node-resolve": "^3.3.0"
   },
   "dependencies": {
-    "naca-four-digit-airfoil": "^1.0.4"
+    "naca-four-digit-airfoil": "^1.0.4",
+    "numeric": "^1.2.6"
   }
 }
