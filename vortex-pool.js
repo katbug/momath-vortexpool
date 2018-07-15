@@ -265,27 +265,38 @@ function merge(box1, box2) {
 }
 
 function mergeBoxes(boxes) {
+  console.log("In merge boxes");
   let boxesFinal = [];
-  let hasMerged = false;
 
   //check if boxes intersect and if so, merge
-  for (let i = 0; i < boxes.length - 1; ++i) {
-    hasMerged = false;
+  let toRemove =  [];
+  for (let i = 0; i < boxes.length; ++i) {
+    if (toRemove.indexOf(i) > 0)
+    {
+      continue;
+    }
 
     for (let j = i+1; j < boxes.length; ++j) {
+
+        if (toRemove.indexOf(j) > 0)
+        {
+          continue;
+        }
         if (collideRectRect(boxes[i], boxes[j])) {
+          console.log("Merging ", i, " ", j);
           let boxNew = merge(boxes[i], boxes[j]);
+          toRemove.push(i);
+          toRemove.push(j);
           boxesFinal.push(boxNew);
-          hasMerged = true;
-          boxes.splice(j);
           break;
       }
     }
-    if (!hasMerged) boxesFinal.push(boxes[i]);
+    if (toRemove.indexOf(i) < 0) {
+      console.log("Adding box ", i);
+      boxesFinal.push(boxes[i]);
+    }
   }
-  if (boxes.length > 0) {
-      boxesFinal.push(boxes[boxes.length - 1]);
-  }
+
   return boxesFinal;
 }
 
