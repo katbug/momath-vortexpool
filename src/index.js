@@ -21,8 +21,10 @@ const PARTICLE_DENSITY = 20;
 const TIMESCALE = 3;
 const TRAILSCALE = 4;
 const TRAIL_MAX_LEN_SQ = 20*20;
+const MAX_PARTICLES = 1500;
 const pb = new P5Behavior();
 const particles = new Set();
+// window.particles = particles;
 const rainbow = getRainbow();
 
 let particleCreationCount = 0;
@@ -91,6 +93,17 @@ pb.draw = function (floor, p) {
   this.noStroke();
 
   createNewParticles(p.height);
+
+  if (particles.size > MAX_PARTICLES) {
+      const numToDelete = particles.size - MAX_PARTICLES;
+      let numDeleted = 0;
+      const it = particles.values();
+      for (let particle = it.next().value; numDeleted < numToDelete; particle = it.next().value) {
+          particles.delete(particle);
+          numDeleted++;
+      }
+  }
+
   particles.forEach(particle => {
     let p = particle.position;
     const vel = sim.velocity({x:p[0], y: p[1]});
@@ -104,7 +117,7 @@ pb.draw = function (floor, p) {
     else {
       this.stroke(...particle.color, 127);
       this.strokeWeight(2);
-      
+
       //compute tail
       let tx = TRAILSCALE * (1 + vel.x);
       let ty = TRAILSCALE * (vel.y);
