@@ -15,7 +15,7 @@
 > in smoke rings, whirlpools in the wake of boats, or the winds surrounding a
 > tornado or dust devil.
 
-<img style="max-width: 500px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Airplane_vortex_edit.jpg/1920px-Airplane_vortex_edit.jpg">
+<img width="500px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Airplane_vortex_edit.jpg/1920px-Airplane_vortex_edit.jpg">
 
 ## The Submission
 
