@@ -91,7 +91,7 @@ pb.draw = function (floor, p) {
     var flip = [];
     let xOffset = u.x - scale/2;
     let yOffset = u.y;
-    for (let i = 0; i < NUM_POINTS; ++i)
+    for (let i = NUM_POINTS; i >= 0; --i)
     {
       let lookupX = scale*i/NUM_POINTS;
       let points = airfoil.evaluate(lookupX);
