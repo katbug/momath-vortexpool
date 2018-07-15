@@ -39,9 +39,6 @@ function createNewParticles(height) {
     }
 }
 
-pb.preload = function (p) {
-}
-
 pb.setup = function (p) {
     this.colorMode(this.HSB);
     createNewParticles(p.height);
