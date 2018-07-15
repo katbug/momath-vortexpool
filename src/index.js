@@ -48,9 +48,6 @@ pb.setup = function (p) {
 pb.draw = function (floor, p) {
   this.clear();
 
-
-  
-
   let foils = []
 
   let boxes = floor.users.map(u => ({
@@ -102,7 +99,9 @@ pb.draw = function (floor, p) {
 
   let sim = new Sim(foils);
 
+  
   this.stroke('white');
+  /*
   for(var x = 0; x < 576; x +=20) {
     for(var y = 0; y < 576; y += 20) {
       var vel = sim.velocity({x, y});
@@ -112,7 +111,7 @@ pb.draw = function (floor, p) {
       var y2 = y + 20*dy;
       this.line(x, y, x2, y2);
     }
-  }
+  }*/
 
   createNewParticles(p.height);
   particles.forEach(particle => {
