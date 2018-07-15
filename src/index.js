@@ -17,6 +17,8 @@ import {getRainbow} from './colors';
 
 const NUM_POINTS = 100;
 const CHORD_LENGTH = 100;
+const PARTICLE_RADIUS = 5;
+const PARTICLE_DENSITY = 20;
 const pb = new P5Behavior();
 const particles = new Set();
 const rainbow = getRainbow();
@@ -24,17 +26,17 @@ const rainbow = getRainbow();
 let particleCreationCount = 0;
 
 function createNewParticles(height) {
-    if (particleCreationCount < 20) {
+    if (particleCreationCount < PARTICLE_DENSITY) {
         particleCreationCount++;
         return;
     } else {
         particleCreationCount = 0;
     }
 
-    for (let i = 0; i < height; i = i + 20) {
+    const color = rainbow.next().value;
+    for (let i = 0; i < height; i = i + PARTICLE_DENSITY) {
         const position = [0, i];
         const velocity = [1, 0];
-        const color = rainbow.next().value;
         const particle = new Particle(color, position, velocity);
         particles.add(particle);
     }
@@ -120,7 +122,7 @@ pb.draw = function (floor, p) {
     //vel.mult(5);
     const [x, y] = particle.move([1+vel.x, vel.y]);
     this.fill(particle.color);
-    this.ellipse(x, y, 5, 5);
+    this.ellipse(x, y, PARTICLE_RADIUS, PARTICLE_RADIUS);
 
     if (x < 0 || y < 0 || x >= p.width || y >= p.height) {
         particles.delete(particle);
