@@ -18,7 +18,7 @@
 <img width="500px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Airplane_vortex_edit.jpg/1920px-Airplane_vortex_edit.jpg">
 
 
-Each User controls the position of an idealized point vortex on the screen. Each vortex induces and angular velocity given by
+Each User controls the position of an idealized point vortex on the screen. Each vortex induces an angular velocity given by
 
 ![equation](http://latex.codecogs.com/gif.latex?V_%5Ctheta%20%3D%20%5Cfrac%7B%5CGamma%7D%7B2%5Cpi%20%5Cleft%20%5C%7C%20r_%7Buser%7D%20-%20r_%7Bvortex%7D%5Cright%5C%7C%7D) 
 
