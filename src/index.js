@@ -82,7 +82,7 @@ pb.draw = function (floor, p) {
     this.beginShape();
 
     var scale = u.scale;
-    const airfoil = naca('3418', scale);
+    const airfoil = naca('4415', scale);
 
     var flip = [];
     let xOffset = u.x - scale/2;
@@ -91,8 +91,8 @@ pb.draw = function (floor, p) {
     {
       let lookupX = scale*i/NUM_POINTS;
       let points = airfoil.evaluate(lookupX);
-      let x = points[0] + xOffset;
-      let y = points[1] + yOffset;
+      let x = xOffset + points[0];
+      let y = yOffset - points[1];
 
       foil.push({x, y});
       this.vertex(x, y);
@@ -102,13 +102,14 @@ pb.draw = function (floor, p) {
     flip.reverse();
     for (let i = 1; i < NUM_POINTS; i++)
     {
-      let x = flip[i][2] + xOffset;
-      let y = flip[i][3] + yOffset
+      let x = xOffset + flip[i][2];
+      let y = yOffset - flip[i][3];
       this.vertex(x, y);
       foil.push({x, y});
     }
 
     this.endShape(this.CLOSE);
+
   }
 
   this.noStroke();
