@@ -32,10 +32,14 @@ export default class Particle {
         this._velocity = value;
     }
 
-    move(newVelocity) {
+    move() {
         const [x, y] = this._position;
-        this._position = [x + newVelocity[0], y + newVelocity[1]];
-        this._velocity = newVelocity;
+        this._position = [x + this._velocity[0], y + this._velocity[1]];
         return this._position;
+    }
+
+    accelerate(xDelta, yDelta) {
+        const [xSpeed, ySpeed] = this._velocity;
+        this._velocity = [xSpeed + xDelta, ySpeed + yDelta];
     }
 }

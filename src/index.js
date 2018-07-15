@@ -9,16 +9,14 @@
  */
 
 import P5Behavior from 'p5beh';
-import naca from 'naca-four-digit-airfoil';
-import Sim from './simulate';
 
 import Particle from './particle';
 import {getRainbow} from './colors';
 
 const NUM_POINTS = 50;
 const CHORD_LENGTH = 200;
-const PARTICLE_RADIUS = 5;
-const PARTICLE_DENSITY = 20;
+const PARTICLE_RADIUS = 4;
+const PARTICLE_DENSITY = 10; // lower is more dense
 const pb = new P5Behavior();
 const particles = new Set();
 const rainbow = getRainbow();
@@ -50,85 +48,46 @@ pb.setup = function (p) {
 pb.draw = function (floor, p) {
   this.clear();
 
-  let foils = []
+  for (const user of floor.users) {
+      this.stroke('white');
+      this.noFill();
+      this.ellipse(user.x, user.y, 30, 30);
 
-  let boxes = floor.users.map(u => ({
-    x: u.x,
-    y: u.y,
-    scale: CHORD_LENGTH}));
+      const userMass = 1;
+      const particleMass = 0.2;
 
-  boxes = mergeBoxes(boxes);
+      particles.forEach(particle => {
+          let scale = 0.2;
 
-  for (let u of boxes) {
-    let foil = [];
-    foils.push(foil);
+          let xDistance = Math.abs(particle.position[0] - user.x);
+          let xAcceleration = scale * userMass * particleMass / (xDistance);
+          if (particle.position[0] > user.x) {
+              xAcceleration *= -1;
+          }
 
-    this.fill('red');
-    this.stroke('red');
-    this.strokeWeight(1);
-    this.beginShape();
+          let yDistance = Math.abs(particle.position[1] - user.y);
+          let yAcceleration = scale * userMass * particleMass / (yDistance);
+          if (particle.position[0] > user.y) {
+              yAcceleration *= -1;
+          }
 
-    var scale = u.scale;
-    const airfoil = naca('4415', scale);
-
-    var flip = [];
-    let xOffset = u.x - scale/2;
-    let yOffset = u.y;
-    for (let i = NUM_POINTS; i >= 0; --i)
-    {
-      let lookupX = scale*i/NUM_POINTS;
-      let points = airfoil.evaluate(lookupX);
-      let x = xOffset + points[0];
-      let y = yOffset - points[1];
-
-      foil.push({x, y});
-      this.vertex(x, y);
-      flip.push(points);
-    }
-
-    flip.reverse();
-    for (let i = 1; i < NUM_POINTS; i++)
-    {
-      let x = xOffset + flip[i][2];
-      let y = yOffset - flip[i][3];
-      this.vertex(x, y);
-      foil.push({x, y});
-    }
-
-    this.endShape(this.CLOSE);
-
+          particle.accelerate(xAcceleration, yAcceleration);
+      });
   }
-
-  let sim = new Sim(foils);
-
-  /*
-  for(var x = 0; x < 576; x +=20) {
-    for(var y = 0; y < 576; y += 20) {
-      var vel = sim.velocity({x, y});
-      var dx = vel.x;
-      var dy = vel.y;
-      var x2 = x + 20*dx;
-      var y2 = y + 20*dy;
-      this.line(x, y, x2, y2);
-    }
-  }*/
 
   this.noStroke();
 
   createNewParticles(p.height);
+
   particles.forEach(particle => {
-    let p = particle.position;
-    const vel = sim.velocity({x:p[0], y: p[1]});
-    //vel.mult(5);
-    const [x, y] = particle.move([1+vel.x, vel.y]);
+    const [x, y] = particle.move();
     this.fill(particle.color);
     this.ellipse(x, y, PARTICLE_RADIUS, PARTICLE_RADIUS);
 
     if (x < 0 || y < 0 || x >= p.width || y >= p.height) {
         particles.delete(particle);
     }
-});
-  //this.fill(20, 20, 60, 60);
+  });
 };
 
 function collideRectRect(box1, box2) {
@@ -182,7 +141,7 @@ export const behavior = {
   init: pb.init.bind(pb),
   frameRate: 'animate',
   render: pb.render.bind(pb),
-  numGhosts: 1
+  numGhosts: 0
 };
 
 export default behavior;
