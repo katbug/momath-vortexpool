@@ -28,6 +28,7 @@ const particles = new Set();
 // window.particles = particles;
 const rainbow = getRainbow();
 const MERGEID_OFFSET = 1000;
+const ROT_SPEED = 0.01*Math.PI;
 
 let particleCreationCount = 0;
 let DIRECTIONS = {};
@@ -63,6 +64,7 @@ pb.setup = function (p) {
       "clockwise": this.loadImage(WhirlpoolImg.clockwise),
       "counterclockwise": this.loadImage(WhirlpoolImg.counterclockwise)
     };
+    this.userRotationMap = {}; // id -> radians
     this.colorMode(this.HSB);
     createNewParticles(p.height);
 };
@@ -85,6 +87,15 @@ pb.draw = function (floor, p) {
 
   for (let u of boxes) {
     let color = u.dir > 0 ? 'red': 'blue';
+    if (!this.userRotationMap[u.id] || Number.isNaN(this.userRotationMap)) {
+      this.userRotationMap[u.id] = 0;
+    }
+    else if (this.userRotationMap[u.id] > this.TWO_PI)
+    {
+      this.userRotationMap[u.id] -= this.TWO_PI;
+    }
+    let dir = u.dir > 0 ? 1 : -1;
+    this.userRotationMap[u.id] += -dir*ROT_SPEED;
     this.fill(color);
     this.stroke(color);
     this.strokeWeight(1);
@@ -96,7 +107,10 @@ pb.draw = function (floor, p) {
     {
       img = this.whirlpoolImg.counterclockwise;
     }
-    this.image(img, u.x - rad/2, u.y - rad/2, rad, rad);
+    this.translate(u.x, u.y);
+    this.rotate(this.userRotationMap[u.id]);
+    this.image(img, -rad/2, -rad/2, rad, rad);
+    this.resetMatrix();
     // this.ellipse(u.x, u.y, rad/2, rad/2);
   }
 
