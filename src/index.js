@@ -99,8 +99,6 @@ pb.draw = function (floor, p) {
 
   let sim = new Sim(foils);
 
-  
-  this.stroke('white');
   /*
   for(var x = 0; x < 576; x +=20) {
     for(var y = 0; y < 576; y += 20) {
@@ -112,6 +110,8 @@ pb.draw = function (floor, p) {
       this.line(x, y, x2, y2);
     }
   }*/
+
+  this.noStroke();
 
   createNewParticles(p.height);
   particles.forEach(particle => {
@@ -127,7 +127,6 @@ pb.draw = function (floor, p) {
     }
 });
   //this.fill(20, 20, 60, 60);
-  this.noStroke();
 };
 
 function collideRectRect(box1, box2) {
