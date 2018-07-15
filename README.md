@@ -1,7 +1,17 @@
-# momath-windtunnel
-repo for momath hackathon
+# MoMath Hackathon 2018: Wind Tunnel
 
-## Develpment
+* Project category: Math Square
+* Team members:
+    * Azeem Bande-Ali
+    * Steven Gomez
+    * Kathryn Grunewald
+    * Danny Guo
+
+## The Math
+
+## The Submission
+
+## Development
 
 Run `$ npm install` to install dependencies.
 

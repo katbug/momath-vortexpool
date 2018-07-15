@@ -20,10 +20,6 @@ const pb = new P5Behavior();
 const particles = new Set();
 const rainbow = getRainbow();
 
-/* this == pb.p5 == p */
-
-// for WEBGL: pb.renderer = 'webgl';
-
 let particleCreationCount = 0;
 
 function createNewParticles(height) {
@@ -47,12 +43,12 @@ pb.preload = function (p) {
 }
 
 pb.setup = function (p) {
+    this.colorMode(this.HSB);
     createNewParticles(p.height);
 };
 
 pb.draw = function (floor, p) {
   this.clear();
-  this.colorMode(this.HSB);
 
   createNewParticles(p.height);
 
@@ -115,10 +111,7 @@ pb.draw = function (floor, p) {
     this.endShape(this.CLOSE);
   }
 
-
-  this.fill(20, 20, 60, 60);
   this.noStroke();
-  // pb.drawSensors(floor.sensors);
 };
 
 function collideRectRect(box1, box2) {
