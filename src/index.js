@@ -20,10 +20,6 @@ const pb = new P5Behavior();
 const particles = new Set();
 const rainbow = getRainbow();
 
-/* this == pb.p5 == p */
-
-// for WEBGL: pb.renderer = 'webgl';
-
 let particleCreationCount = 0;
 
 function createNewParticles(height) {
