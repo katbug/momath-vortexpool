@@ -11,24 +11,58 @@
 import P5Behavior from 'p5beh';
 import naca from 'naca-four-digit-airfoil';
 
+import Particle from './particle';
+import {getRainbow} from './colors';
+
 const NUM_POINTS = 100;
 const CHORD_LENGTH = 100;
 const pb = new P5Behavior();
+const particles = new Set();
+
 /* this == pb.p5 == p */
 
 // for WEBGL: pb.renderer = 'webgl';
+
+let particleCreationCount = 0;
+
+function createNewParticles(height) {
+    if (particleCreationCount < 20) {
+        particleCreationCount++;
+        return;
+    } else {
+        particleCreationCount = 0;
+    }
+
+    for (let i = 0; i < height; i = i + 20) {
+        const position = [0, i];
+        const velocity = [1, 0];
+        const particle = new Particle([255, 0, 0], position, velocity);
+        particles.add(particle);
+    }
+}
 
 pb.preload = function (p) {
 }
 
 pb.setup = function (p) {
+    createNewParticles(p.height);
 };
 
 pb.draw = function (floor, p) {
-  /* this == pb.p5 == p */
-
-  // console.log('hello', floor, p);
   this.clear();
+
+  createNewParticles(p.height);
+
+  particles.forEach(particle => {
+      const newVelocity = [1, 0];
+      const [x, y] = particle.move(newVelocity);
+      this.stroke('red');
+      this.point(x, y);
+
+      if (x < 0 || y < 0 || x >= p.width || y >= p.height) {
+          particles.delete(particle);
+      }
+  });
 
   let foils = []
 
@@ -53,7 +87,7 @@ pb.draw = function (floor, p) {
 
     var flip = [];
     let xOffset = u.x - scale/2;
-    let yOffset = u.y; 
+    let yOffset = u.y;
     for (let i = 0; i < NUM_POINTS; ++i)
     {
       let lookupX = scale*i/NUM_POINTS;
@@ -108,7 +142,7 @@ function merge(box1, box2) {
 function mergeBoxes(boxes) {
   let boxesFinal = [];
   let hasMerged = false;
-  
+
   //check if boxes intersect and if so, merge
   for (let i = 0; i < boxes.length - 1; ++i) {
     hasMerged = false;
