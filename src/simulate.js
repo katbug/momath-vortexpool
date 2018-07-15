@@ -25,11 +25,18 @@ class Simulation {
             elems.push(panels)
         }
 
-        this.ls = new VP.LinearSystem(elems);
+        if (elems.length !== 0) {
+            this.ls = new VP.LinearSystem(elems);
+        }
     }
 
     velocity(p) {
-        return this.ls.computeVelocity(p);
+        if (this.ls) {
+            return this.ls.computeVelocity(p);
+        }
+        else {
+            return new Vector(0,0);
+        }
     }
 }
 
