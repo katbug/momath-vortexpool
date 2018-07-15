@@ -1,10 +1,10 @@
 /* MoMath Math Square Behavior
  *
- *        Title: Wind Tunnel
- *  Description: wind tunnel simulation
+ *        Title: Vortex Pool
+ *  Description: simulation of vortexes
  * Scheduler ID:
  *    Framework: P5
- *       Author:
+ *       Author: Azeem Bande-Ali, Steven Gomez, Kathryn Grunewald, Danny Guo
  *       Status: work in progress
  */
 
@@ -21,10 +21,13 @@ const PARTICLE_RADIUS = 5;
 const PARTICLE_DENSITY = 20;
 const TIMESCALE = 3;
 const TRAILSCALE = 4;
-const TRAIL_MAX_LEN_SQ = 30*30;
+const TRAIL_MAX_LEN_SQ = 20*20;
+const MAX_PARTICLES = 1500;
 const pb = new P5Behavior();
 const particles = new Set();
+// window.particles = particles;
 const rainbow = getRainbow();
+const MERGEID_OFFSET = 1000;
 
 let particleCreationCount = 0;
 let DIRECTIONS = {};
@@ -70,6 +73,7 @@ pb.draw = function (floor, p) {
   let foils = []
 
   let boxes = floor.users.map(u => ({
+    id: u.id,
     x: u.x,
     y: u.y,
     scale: CHORD_LENGTH,
@@ -101,6 +105,17 @@ pb.draw = function (floor, p) {
   this.noStroke();
 
   createNewParticles(p.height);
+
+  if (particles.size > MAX_PARTICLES) {
+      const numToDelete = particles.size - MAX_PARTICLES;
+      let numDeleted = 0;
+      const it = particles.values();
+      for (let particle = it.next().value; numDeleted < numToDelete; particle = it.next().value) {
+          particles.delete(particle);
+          numDeleted++;
+      }
+  }
+
   particles.forEach(particle => {
     let p = particle.position;
     const vel = sim.velocity({x:p[0], y: p[1]});
@@ -114,7 +129,7 @@ pb.draw = function (floor, p) {
     else {
       this.stroke(...particle.color, 127);
       this.strokeWeight(2);
-      
+
       //compute tail
       let tx = TRAILSCALE * (1 + vel.x);
       let ty = TRAILSCALE * (vel.y);
@@ -152,11 +167,18 @@ function collideRectRect(box1, box2) {
 };
 
 function merge(box1, box2) {
+    let mergeId = MERGEID_OFFSET + box1.id + box2.id;
+    let dir = box1.dir;
+    if (box1.dir !== box2.dir) {
+      dir = getDir(mergeId);
+    }
+
     let boxNew = {
+        id: mergeId,
         x: ((box1.x + box2.x) / 2),
         y: ((box1.y + box2.y) / 2),
         scale: box1.scale + box2.scale,
-        dir: box1.dir * box2.dir
+        dir: dir
     }
     return boxNew;
 }
@@ -187,7 +209,7 @@ function mergeBoxes(boxes) {
 }
 
 export const behavior = {
-  title: 'Wind Tunnel',
+  title: 'Vortex Pool',
   init: pb.init.bind(pb),
   frameRate: 'animate',
   render: pb.render.bind(pb),

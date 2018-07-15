@@ -13,7 +13,7 @@ class Simulation {
             let dy = p.y - vortex.y;
             let strength = vortex.scale * vortex.dir;
             let distSq = (dx*dx + dy*dy);
-		    vx += strength * dy / distSq;
+		    vx +=  strength * dy / distSq;
 			vy += -strength * dx / distSq;
         }
         return new Vector(vx, vy);
