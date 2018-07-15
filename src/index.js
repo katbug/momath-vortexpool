@@ -199,7 +199,6 @@ function merge(box1, box2) {
 }
 
 function mergeBoxes(boxes) {
-  console.log("In merge boxes");
   let boxesFinal = [];
 
   //check if boxes intersect and if so, merge
@@ -217,7 +216,6 @@ function mergeBoxes(boxes) {
           continue;
         }
         if (collideRectRect(boxes[i], boxes[j])) {
-          console.log("Merging ", i, " ", j);
           let boxNew = merge(boxes[i], boxes[j]);
           toRemove.push(i);
           toRemove.push(j);
@@ -226,7 +224,6 @@ function mergeBoxes(boxes) {
       }
     }
     if (toRemove.indexOf(i) < 0) {
-      console.log("Adding box ", i);
       boxesFinal.push(boxes[i]);
     }
   }
