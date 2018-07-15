@@ -51,18 +51,8 @@ pb.setup = function (p) {
 pb.draw = function (floor, p) {
   this.clear();
 
-  createNewParticles(p.height);
 
-  particles.forEach(particle => {
-      const newVelocity = [1, 0];
-      const [x, y] = particle.move(newVelocity);
-      this.fill(particle.color);
-      this.ellipse(x, y, 5, 5);
-
-      if (x < 0 || y < 0 || x >= p.width || y >= p.height) {
-          particles.delete(particle);
-      }
-  });
+  
 
   let foils = []
 
@@ -113,7 +103,6 @@ pb.draw = function (floor, p) {
     this.endShape(this.CLOSE);
   }
 
-  console.log('foils ', foils);
   let sim = new Sim(foils);
 
   this.stroke('white');
@@ -122,13 +111,25 @@ pb.draw = function (floor, p) {
       var vel = sim.velocity({x, y});
       var dx = vel.x;
       var dy = vel.y;
-      var x2 = x + dx;
-      var y2 = y + dy;
+      var x2 = x + 20*dx;
+      var y2 = y + 20*dy;
       this.line(x, y, x2, y2);
     }
   }
-  console.log('vel = ', sim.velocity({x :250, y: 250}));
 
+  createNewParticles(p.height);
+  particles.forEach(particle => {
+    let p = particle.position;
+    const vel = sim.velocity({x:p[0], y: p[1]});
+    //vel.mult(5);
+    const [x, y] = particle.move([1+vel.x, vel.y]);
+    this.fill(particle.color);
+    this.ellipse(x, y, 5, 5);
+
+    if (x < 0 || y < 0 || x >= p.width || y >= p.height) {
+        particles.delete(particle);
+    }
+});
   //this.fill(20, 20, 60, 60);
   this.noStroke();
 };
