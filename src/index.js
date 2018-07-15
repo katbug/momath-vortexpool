@@ -101,7 +101,7 @@ pb.draw = function (floor, p) {
     }
 
     flip.reverse();
-    for (let i = 0; i < NUM_POINTS; i++)
+    for (let i = 1; i < NUM_POINTS; i++)
     {
       this.vertex(flip[i][2] + xOffset, flip[i][3] + yOffset);
       let x = flip[i][2] + xOffset;
