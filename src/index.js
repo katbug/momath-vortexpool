@@ -19,13 +19,23 @@ const NUM_POINTS = 50;
 const CHORD_LENGTH = 50;//200;
 const PARTICLE_RADIUS = 5;
 const PARTICLE_DENSITY = 20;
-const TIMESCALE = 1.5;
+const TIMESCALE = 3;
 const TRAILSCALE = 4;
 const pb = new P5Behavior();
 const particles = new Set();
 const rainbow = getRainbow();
 
 let particleCreationCount = 0;
+let DIRECTIONS = {};
+function getDir(userId) {
+  var dir = DIRECTIONS[userId];
+  if (dir === undefined) {
+    dir = (Math.random() < 0.5) ? -1 : 1;
+    DIRECTIONS[userId] = dir;
+    //console.log(`userId = ${userId}, dir = ${dir}`)
+  }
+  return dir;
+}
 
 function createNewParticles(height) {
     if (particleCreationCount < PARTICLE_DENSITY) {
@@ -57,15 +67,17 @@ pb.draw = function (floor, p) {
   let boxes = floor.users.map(u => ({
     x: u.x,
     y: u.y,
-    scale: CHORD_LENGTH}));
+    scale: CHORD_LENGTH,
+    dir: getDir(u.id)
+  }));
 
   boxes = mergeBoxes(boxes);
 
 
   for (let u of boxes) {
-
-    this.fill('red');
-    this.stroke('red');
+    let color = u.dir > 0 ? 'red': 'blue';
+    this.fill(color);
+    this.stroke(color);
     this.strokeWeight(1);
     //this.beginShape();
     let rad = u.scale;
@@ -165,7 +177,9 @@ function merge(box1, box2) {
     let boxNew = {
         x: ((box1.x + box2.x) / 2),
         y: ((box1.y + box2.y) / 2),
-        scale: box1.scale + box2.scale}
+        scale: box1.scale + box2.scale,
+        dir: box1.dir * box2.dir
+    }
     return boxNew;
 }
 
