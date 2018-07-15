@@ -84,7 +84,8 @@ function* getRainbow() {
  * Scheduler ID:
  *    Framework: P5
  *       Author: Azeem Bande-Ali, Steven Gomez, Kathryn Grunewald, Danny Guo
- *       Status: work in progress
+ *      Created: 2018-07
+ *       Status: works
  */
 const CHORD_LENGTH = 50;//200;
 const PARTICLE_RADIUS = 5;
