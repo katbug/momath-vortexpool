@@ -7,7 +7,7 @@
     * Kathryn Grunewald
     * Danny Guo
 
-![vortex](https://en.wikipedia.org/wiki/Vortex#/media/File:Airplane_vortex_edit.jpg)
+<img src="https://en.wikipedia.org/wiki/Vortex#/media/File:Airplane_vortex_edit.jpg">
 
 ## The Math
 
