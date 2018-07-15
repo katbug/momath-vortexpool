@@ -12,24 +12,57 @@ import P5Behavior from 'p5beh';
 import naca from 'naca-four-digit-airfoil';
 import Sim from './simulate';
 
+import Particle from './particle';
+import {getRainbow} from './colors';
+
 const NUM_POINTS = 100;
 const CHORD_LENGTH = 100;
 const pb = new P5Behavior();
-/* this == pb.p5 == p */
+const particles = new Set();
+const rainbow = getRainbow();
 
-// for WEBGL: pb.renderer = 'webgl';
+let particleCreationCount = 0;
+
+function createNewParticles(height) {
+    if (particleCreationCount < 20) {
+        particleCreationCount++;
+        return;
+    } else {
+        particleCreationCount = 0;
+    }
+
+    for (let i = 0; i < height; i = i + 20) {
+        const position = [0, i];
+        const velocity = [1, 0];
+        const color = rainbow.next().value;
+        const particle = new Particle(color, position, velocity);
+        particles.add(particle);
+    }
+}
 
 pb.preload = function (p) {
 }
 
 pb.setup = function (p) {
+    this.colorMode(this.HSB);
+    createNewParticles(p.height);
 };
 
 pb.draw = function (floor, p) {
-  /* this == pb.p5 == p */
-
-  // console.log('hello', floor, p);
   this.clear();
+
+  createNewParticles(p.height);
+
+  particles.forEach(particle => {
+      const newVelocity = [1, 0];
+      const [x, y] = particle.move(newVelocity);
+      this.fill(particle.color);
+      this.ellipse(x, y, 5, 5);
+
+      if (x < 0 || y < 0 || x >= p.width || y >= p.height) {
+          particles.delete(particle);
+      }
+  });
 
   let foils = []
 
@@ -54,8 +87,8 @@ pb.draw = function (floor, p) {
 
     var flip = [];
     let xOffset = u.x - scale/2;
-    let yOffset = u.y; 
-    for (let i = 0; i < NUM_POINTS; ++i)
+    let yOffset = u.y;
+    for (let i = NUM_POINTS; i >= 0; --i)
     {
       let lookupX = scale*i/NUM_POINTS;
       let points = airfoil.evaluate(lookupX);
@@ -98,7 +131,6 @@ pb.draw = function (floor, p) {
 
   //this.fill(20, 20, 60, 60);
   this.noStroke();
-  // pb.drawSensors(floor.sensors);
 };
 
 function collideRectRect(box1, box2) {
@@ -125,7 +157,7 @@ function merge(box1, box2) {
 function mergeBoxes(boxes) {
   let boxesFinal = [];
   let hasMerged = false;
-  
+
   //check if boxes intersect and if so, merge
   for (let i = 0; i < boxes.length - 1; ++i) {
     hasMerged = false;
