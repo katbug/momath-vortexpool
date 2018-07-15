@@ -10,6 +10,7 @@
 
 import P5Behavior from 'p5beh';
 import Sim from './simulate';
+import WhirlpoolImg from './whirlpool';
 
 import Particle from './particle';
 import {getRainbow} from './colors';
@@ -55,6 +56,10 @@ function createNewParticles(height) {
 }
 
 pb.setup = function (p) {
+    this.whirlpoolImg = {
+      "clockwise": this.loadImage(WhirlpoolImg.clockwise),
+      "counterclockwise": this.loadImage(WhirlpoolImg.counterclockwise)
+    };
     this.colorMode(this.HSB);
     createNewParticles(p.height);
 };
@@ -81,9 +86,14 @@ pb.draw = function (floor, p) {
     this.strokeWeight(1);
     //this.beginShape();
     let rad = u.scale;
-    this.ellipse(u.x, u.y, rad, rad);
 
-
+    let img = this.whirlpoolImg.clockwise;
+    if (u.dir > 0)
+    {
+      img = this.whirlpoolImg.counterclockwise;
+    }
+    this.image(img, u.x - rad/2, u.y - rad/2, rad, rad);
+    // this.ellipse(u.x, u.y, rad/2, rad/2);
   }
 
   let sim = new Sim(boxes);
