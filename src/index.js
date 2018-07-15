@@ -20,7 +20,7 @@ const PARTICLE_RADIUS = 5;
 const PARTICLE_DENSITY = 20;
 const TIMESCALE = 3;
 const TRAILSCALE = 4;
-const TRAIL_MAX_LEN_SQ = 30*30;
+const TRAIL_MAX_LEN_SQ = 20*20;
 const pb = new P5Behavior();
 const particles = new Set();
 const rainbow = getRainbow();
@@ -177,7 +177,7 @@ function mergeBoxes(boxes) {
 }
 
 export const behavior = {
-  title: 'Wind Tunnel',
+  title: 'Vortex Pool',
   init: pb.init.bind(pb),
   frameRate: 'animate',
   render: pb.render.bind(pb),
