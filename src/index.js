@@ -16,9 +16,11 @@ import Particle from './particle';
 import {getRainbow} from './colors';
 
 const NUM_POINTS = 50;
-const CHORD_LENGTH = 200;
+const CHORD_LENGTH = 50;//200;
 const PARTICLE_RADIUS = 5;
 const PARTICLE_DENSITY = 20;
+const TIMESCALE = 1.5;
+const TRAILSCALE = 4;
 const pb = new P5Behavior();
 const particles = new Set();
 const rainbow = getRainbow();
@@ -59,15 +61,17 @@ pb.draw = function (floor, p) {
 
   boxes = mergeBoxes(boxes);
 
+
   for (let u of boxes) {
-    let foil = [];
-    foils.push(foil);
 
     this.fill('red');
     this.stroke('red');
     this.strokeWeight(1);
-    this.beginShape();
+    //this.beginShape();
+    let rad = u.scale;
+    this.ellipse(u.x, u.y, rad, rad);
 
+    /*
     var scale = u.scale;
     const airfoil = naca('4415', scale);
 
@@ -96,10 +100,11 @@ pb.draw = function (floor, p) {
     }
 
     this.endShape(this.CLOSE);
+    */
 
   }
 
-  let sim = new Sim(foils);
+  let sim = new Sim(boxes);
 
   /*
   for(var x = 0; x < 576; x +=20) {
@@ -119,13 +124,25 @@ pb.draw = function (floor, p) {
   particles.forEach(particle => {
     let p = particle.position;
     const vel = sim.velocity({x:p[0], y: p[1]});
+    vel.mult(TIMESCALE);
     //vel.mult(5);
     const [x, y] = particle.move([1+vel.x, vel.y]);
-    this.fill(particle.color);
-    this.ellipse(x, y, PARTICLE_RADIUS, PARTICLE_RADIUS);
 
     if (x < 0 || y < 0 || x >= p.width || y >= p.height) {
-        particles.delete(particle);
+      particles.delete(particle);
+    }
+    else {
+      this.stroke(...particle.color, 127);
+      this.strokeWeight(2);
+      
+      let xstart = p[0] - TRAILSCALE * (1 + vel.x);
+      let ystart = p[1] - TRAILSCALE * (vel.y);
+      this.line(xstart, ystart, x, y);
+
+      this.noStroke();
+      this.fill(particle.color);
+      this.ellipse(x, y, PARTICLE_RADIUS, PARTICLE_RADIUS);
+
     }
 });
   //this.fill(20, 20, 60, 60);
@@ -182,7 +199,7 @@ export const behavior = {
   init: pb.init.bind(pb),
   frameRate: 'animate',
   render: pb.render.bind(pb),
-  numGhosts: 1
+  numGhosts: 3
 };
 
 export default behavior;
