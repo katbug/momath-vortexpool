@@ -18,9 +18,9 @@
 <img width="500px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Airplane_vortex_edit.jpg/1920px-Airplane_vortex_edit.jpg">
 
 
-Each User controls the position of an idealized point vortex on the screen. Each vortex induces and angular velocity given by
+Each User controls the position of an idealized point vortex on the screen. Each vortex induces an angular velocity given by
 
-![equation](http://latex.codecogs.com/gif.latex?V_%5Ctheta%20%3D%20%5Cfrac%7B%5CGamma%7D%7B2%5Cpi%20%5Cleft%20%5C%7C%20r_%7Buser%7D%20-%20r_%7Bvortex%7D%5Cright%5C%7C%7D)  
+![equation](http://latex.codecogs.com/gif.latex?V_%5Ctheta%20%3D%20%5Cfrac%7B%5CGamma%7D%7B2%5Cpi%20%5Cleft%20%5C%7C%20r_%7Buser%7D%20-%20r_%7Bvortex%7D%5Cright%5C%7C%7D) 
 
 Where &#915; is the strength of each vortex and `r` is the location of the user or vortex. At any given point the particles react to the influence of every vortex and the constant free stream flow. 
 
@@ -44,6 +44,9 @@ obvious.
 We think kids will enjoy this behavior because they can stand in the middle of
 the field, creating their own vortex and allowing them to experiment with how
 they can affect the flow of particles.
+
+
+<img src="https://i.giphy.com/media/5t0xYGbjTrVsxSmobq/giphy.webp">
 
 ## Additional Notes
 
