@@ -5,7 +5,8 @@
  * Scheduler ID:
  *    Framework: P5
  *       Author: Azeem Bande-Ali, Steven Gomez, Kathryn Grunewald, Danny Guo
- *       Status: work in progress
+ *      Created: 2018-07
+ *       Status: works
  */
 
 import P5Behavior from 'p5beh';
