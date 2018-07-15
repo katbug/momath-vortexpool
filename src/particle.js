@@ -1,7 +1,7 @@
 export default class Particle {
-    /* color is a 3 element tuple representing a HSV value
-       position is a P5.Vector
-       velocity is a P5.Vector */
+    /* color is a 3 element array representing a HSV value
+       position is a 2 element array representing the X and Y coordinates
+       velocity is a 2 element array representing the speed in each direction */
     constructor(color, position, velocity) {
         this._color = color;
         this._position = position;
