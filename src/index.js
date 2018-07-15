@@ -18,6 +18,7 @@ const NUM_POINTS = 100;
 const CHORD_LENGTH = 100;
 const pb = new P5Behavior();
 const particles = new Set();
+const rainbow = getRainbow();
 
 /* this == pb.p5 == p */
 
@@ -36,7 +37,8 @@ function createNewParticles(height) {
     for (let i = 0; i < height; i = i + 20) {
         const position = [0, i];
         const velocity = [1, 0];
-        const particle = new Particle([255, 0, 0], position, velocity);
+        const color = rainbow.next().value;
+        const particle = new Particle(color, position, velocity);
         particles.add(particle);
     }
 }
@@ -50,14 +52,15 @@ pb.setup = function (p) {
 
 pb.draw = function (floor, p) {
   this.clear();
+  this.colorMode(this.HSB);
 
   createNewParticles(p.height);
 
   particles.forEach(particle => {
       const newVelocity = [1, 0];
       const [x, y] = particle.move(newVelocity);
-      this.stroke('red');
-      this.point(x, y);
+      this.fill(particle.color);
+      this.ellipse(x, y, 5, 5);
 
       if (x < 0 || y < 0 || x >= p.width || y >= p.height) {
           particles.delete(particle);
