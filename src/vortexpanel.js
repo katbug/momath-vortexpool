@@ -283,7 +283,7 @@ function LinearSystem(elements)
 		}
 
 		let res = new Vector(vx, vy);
-		res.div(2*Math.PI);
+		res.div(Math.PI).mult(1.2);
 		return res;
 	};
 

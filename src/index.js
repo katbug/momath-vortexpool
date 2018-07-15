@@ -15,8 +15,8 @@ import Sim from './simulate';
 import Particle from './particle';
 import {getRainbow} from './colors';
 
-const NUM_POINTS = 100;
-const CHORD_LENGTH = 100;
+const NUM_POINTS = 50;
+const CHORD_LENGTH = 200;
 const PARTICLE_RADIUS = 5;
 const PARTICLE_DENSITY = 20;
 const pb = new P5Behavior();
