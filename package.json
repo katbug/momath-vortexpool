@@ -1,7 +1,7 @@
 {
-  "name": "momath-windtunnel",
+  "name": "momath-vortex-pool",
   "version": "0.1.0",
-  "description": "MoMath Math Square Wind Tunnel",
+  "description": "MoMath Math Square Vortex Pool",
   "main": "index.js",
   "scripts": {
     "build": "rollup -c rollup.config.js",

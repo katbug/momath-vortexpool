@@ -1,10 +1,10 @@
 /* MoMath Math Square Behavior
  *
- *        Title: Wind Tunnel
- *  Description: wind tunnel simulation
+ *        Title: Vortex Pool
+ *  Description: simulation of vortexes
  * Scheduler ID:
  *    Framework: P5
- *       Author:
+ *       Author: Azeem Bande-Ali, Steven Gomez, Kathryn Grunewald, Danny Guo
  *       Status: work in progress
  */
 
