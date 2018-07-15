@@ -47,12 +47,12 @@ pb.preload = function (p) {
 }
 
 pb.setup = function (p) {
+    this.colorMode(this.HSB);
     createNewParticles(p.height);
 };
 
 pb.draw = function (floor, p) {
   this.clear();
-  this.colorMode(this.HSB);
 
   createNewParticles(p.height);
 
@@ -115,10 +115,7 @@ pb.draw = function (floor, p) {
     this.endShape(this.CLOSE);
   }
 
-
-  this.fill(20, 20, 60, 60);
   this.noStroke();
-  // pb.drawSensors(floor.sensors);
 };
 
 function collideRectRect(box1, box2) {
