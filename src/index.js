@@ -10,6 +10,7 @@
 
 import P5Behavior from 'p5beh';
 import naca from 'naca-four-digit-airfoil';
+import Sim from './simulate';
 
 const NUM_POINTS = 100;
 const CHORD_LENGTH = 100;
@@ -31,8 +32,10 @@ pb.draw = function (floor, p) {
   // console.log('hello', floor, p);
   this.clear();
 
+  var elements = [];
 
   for (let u of floor.users) {
+    var path = [];
     this.fill('red');
     this.stroke('red');
     this.strokeWeight(1);
@@ -56,11 +59,15 @@ pb.draw = function (floor, p) {
     for (let i = 0; i < NUM_POINTS; i++)
     {
       this.vertex(flip[i][2] + xOffset, flip[i][3] + yOffset);
+      path.push({x:flip[i][2] + xOffset, y:flip[i][3] + yOffset});
     }
 
     this.endShape(this.CLOSE);
+    elements.push(path);
   }
 
+  let sim = new Sim(elements);
+  console.log('vel = ', sim.velocity({x :250, y: 250}));
 
   this.fill(20, 20, 60, 60);
   this.noStroke();
