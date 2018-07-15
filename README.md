@@ -1,6 +1,6 @@
 # MoMath Hackathon 2018: Vortex Pool
 
-* Project category: Math Square
+* Project category: [Math Square](https://github.com/momath/math-square)
 * Team members:
     * Azeem Bande-Ali
     * Steven Gomez
@@ -38,7 +38,11 @@ We think kids will enjoy this behavior because they can stand in the middle of
 the field, creating their own vortex and allowing them to experiment with how
 they can affect the flow of particles.
 
-## Development
+## Additional Notes
+
+The entire behavior is in `vortex-pool.js`.
+
+### Development
 
 Run `$ npm install` to install dependencies.
 
