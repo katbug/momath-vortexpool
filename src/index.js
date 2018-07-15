@@ -26,6 +26,7 @@ const pb = new P5Behavior();
 const particles = new Set();
 // window.particles = particles;
 const rainbow = getRainbow();
+const MERGEID_OFFSET = 1000;
 
 let particleCreationCount = 0;
 let DIRECTIONS = {};
@@ -67,6 +68,7 @@ pb.draw = function (floor, p) {
   let foils = []
 
   let boxes = floor.users.map(u => ({
+    id: u.id,
     x: u.x,
     y: u.y,
     scale: CHORD_LENGTH,
@@ -155,11 +157,18 @@ function collideRectRect(box1, box2) {
 };
 
 function merge(box1, box2) {
+    let mergeId = MERGEID_OFFSET + box1.id + box2.id;
+    let dir = box1.dir;
+    if (box1.dir !== box2.dir) {
+      dir = getDir(mergeId);
+    }
+
     let boxNew = {
+        id: mergeId,
         x: ((box1.x + box2.x) / 2),
         y: ((box1.y + box2.y) / 2),
         scale: box1.scale + box2.scale,
-        dir: box1.dir * box2.dir
+        dir: dir
     }
     return boxNew;
 }
