@@ -45,8 +45,7 @@ We think kids will enjoy this behavior because they can stand in the middle of
 the field, creating their own vortex and allowing them to experiment with how
 they can affect the flow of particles.
 
-
-<img src="https://i.giphy.com/media/5t0xYGbjTrVsxSmobq/giphy.webp">
+<img src="https://thumbs.gfycat.com/UnhappyTinyBumblebee-size_restricted.gif">
 
 ## Additional Notes
 
