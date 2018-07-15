@@ -9,7 +9,6 @@
  */
 
 import P5Behavior from 'p5beh';
-import naca from 'naca-four-digit-airfoil';
 import Sim from './simulate';
 
 import Particle from './particle';
@@ -21,6 +20,7 @@ const PARTICLE_RADIUS = 5;
 const PARTICLE_DENSITY = 20;
 const TIMESCALE = 3;
 const TRAILSCALE = 4;
+const TRAIL_MAX_LEN_SQ = 30*30;
 const pb = new P5Behavior();
 const particles = new Set();
 const rainbow = getRainbow();
@@ -83,52 +83,10 @@ pb.draw = function (floor, p) {
     let rad = u.scale;
     this.ellipse(u.x, u.y, rad, rad);
 
-    /*
-    var scale = u.scale;
-    const airfoil = naca('4415', scale);
-
-    var flip = [];
-    let xOffset = u.x - scale/2;
-    let yOffset = u.y;
-    for (let i = NUM_POINTS; i >= 0; --i)
-    {
-      let lookupX = scale*i/NUM_POINTS;
-      let points = airfoil.evaluate(lookupX);
-      let x = xOffset + points[0];
-      let y = yOffset - points[1];
-
-      foil.push({x, y});
-      this.vertex(x, y);
-      flip.push(points);
-    }
-
-    flip.reverse();
-    for (let i = 1; i < NUM_POINTS; i++)
-    {
-      let x = xOffset + flip[i][2];
-      let y = yOffset - flip[i][3];
-      this.vertex(x, y);
-      foil.push({x, y});
-    }
-
-    this.endShape(this.CLOSE);
-    */
 
   }
 
   let sim = new Sim(boxes);
-
-  /*
-  for(var x = 0; x < 576; x +=20) {
-    for(var y = 0; y < 576; y += 20) {
-      var vel = sim.velocity({x, y});
-      var dx = vel.x;
-      var dy = vel.y;
-      var x2 = x + 20*dx;
-      var y2 = y + 20*dy;
-      this.line(x, y, x2, y2);
-    }
-  }*/
 
   this.noStroke();
 
@@ -147,8 +105,19 @@ pb.draw = function (floor, p) {
       this.stroke(...particle.color, 127);
       this.strokeWeight(2);
       
-      let xstart = p[0] - TRAILSCALE * (1 + vel.x);
-      let ystart = p[1] - TRAILSCALE * (vel.y);
+      //compute tail
+      let tx = TRAILSCALE * (1 + vel.x);
+      let ty = TRAILSCALE * (vel.y);
+      let tlen = tx*tx + ty*ty;
+      if (tlen > TRAIL_MAX_LEN_SQ) { //limit trail length
+        let shrink = Math.sqrt(TRAIL_MAX_LEN_SQ/tlen);
+        tx *= shrink;
+        ty *= shrink;
+      }
+
+
+      let xstart = p[0] - tx;
+      let ystart = p[1] - ty;
       this.line(xstart, ystart, x, y);
 
       this.noStroke();
@@ -156,8 +125,7 @@ pb.draw = function (floor, p) {
       this.ellipse(x, y, PARTICLE_RADIUS, PARTICLE_RADIUS);
 
     }
-});
-  //this.fill(20, 20, 60, 60);
+  });
 };
 
 function collideRectRect(box1, box2) {
