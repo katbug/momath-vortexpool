@@ -13,7 +13,6 @@ import naca from 'naca-four-digit-airfoil';
 
 const NUM_POINTS = 100;
 const CHORD_LENGTH = 100;
-const airfoil = naca('3418', CHORD_LENGTH);
 const pb = new P5Behavior();
 /* this == pb.p5 == p */
 
@@ -31,31 +30,49 @@ pb.draw = function (floor, p) {
   // console.log('hello', floor, p);
   this.clear();
 
+  let foils = []
 
-  for (let u of floor.users) {
+  let boxes = floor.users.map(u => ({
+    x: u.x,
+    y: u.y,
+    scale: CHORD_LENGTH}));
+
+  boxes = mergeBoxes(boxes);
+
+  for (let u of boxes) {
+    let foil = [];
+    foils.push(foil);
+
     this.fill('red');
     this.stroke('red');
     this.strokeWeight(1);
     this.beginShape();
-    
-    var flip = []
-    let xOffset = u.x - CHORD_LENGTH/2;
+
+    var scale = u.scale;
+    const airfoil = naca('3418', scale);
+
+    var flip = [];
+    let xOffset = u.x - scale/2;
     let yOffset = u.y; 
     for (let i = 0; i < NUM_POINTS; ++i)
     {
-      let lookupX = CHORD_LENGTH*i/NUM_POINTS;
+      let lookupX = scale*i/NUM_POINTS;
       let points = airfoil.evaluate(lookupX);
-      let x = points[0];
-      let y = points[1];
+      let x = points[0] + xOffset;
+      let y = points[1] + yOffset;
 
-      this.vertex(xOffset + x, yOffset + y);
+      foil.push({x, y});
+      this.vertex(x, y);
       flip.push(points);
     }
 
     flip.reverse();
     for (let i = 0; i < NUM_POINTS; i++)
     {
-      this.vertex(flip[i][2] + xOffset, flip[i][3] + yOffset);
+      let x = flip[i][2] + xOffset;
+      let y = flip[i][3] + yOffset
+      this.vertex(x, y);
+      foil.push({x, y});
     }
 
     this.endShape(this.CLOSE);
@@ -66,6 +83,52 @@ pb.draw = function (floor, p) {
   this.noStroke();
   // pb.drawSensors(floor.sensors);
 };
+
+function collideRectRect(box1, box2) {
+  if (box1.x - box1.scale/2 >= box2.x +  box2.scale/2 ||
+          box2.x - box2.scale/2 >= box1.x + box1.scale/2) {
+      return false;
+  }
+
+  if (box1.y - box1.scale/2 >= box2.y + box2.scale/2 ||
+         box2.y - box2.scale/2 >= box1.y + box1.scale/2) {
+    return false;
+  }
+  return true;
+};
+
+function merge(box1, box2) {
+    let boxNew = {
+        x: ((box1.x + box2.x) / 2),
+        y: ((box1.y + box2.y) / 2),
+        scale: box1.scale + box2.scale}
+    return boxNew;
+}
+
+function mergeBoxes(boxes) {
+  let boxesFinal = [];
+  let hasMerged = false;
+  
+  //check if boxes intersect and if so, merge
+  for (let i = 0; i < boxes.length - 1; ++i) {
+    hasMerged = false;
+
+    for (let j = i+1; j < boxes.length; ++j) {
+        if (collideRectRect(boxes[i], boxes[j])) {
+          let boxNew = merge(boxes[i], boxes[j]);
+          boxesFinal.push(boxNew);
+          hasMerged = true;
+          boxes.splice(j);
+          break;
+      }
+    }
+    if (!hasMerged) boxesFinal.push(boxes[i]);
+  }
+  if (boxes.length > 0) {
+      boxesFinal.push(boxes[boxes.length - 1]);
+  }
+  return boxesFinal;
+}
 
 export const behavior = {
   title: 'Wind Tunnel',
